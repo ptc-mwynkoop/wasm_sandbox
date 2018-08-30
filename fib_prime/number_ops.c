@@ -1,7 +1,8 @@
 #include <emscripten.h>
+#include <pthread.h> 
 
 EMSCRIPTEN_KEEPALIVE
-int fib(int n) {
+int fib_ww(int n) {
   int i, t, a = 0, b = 1;
   for (i = 0; i < n; i++) {
     t = a + b;
@@ -9,15 +10,15 @@ int fib(int n) {
     b = t;
   }
   // call back into the Javascript layer, just to show how
-  EM_ASM({
-    Module.fibCallback([$0]);
-  }, b);
+  // EM_ASM({
+  //   Module.fibCallback([$0]);
+  // }, b);
 
   return b;
 }
 
 EMSCRIPTEN_KEEPALIVE
-void nprimes(int N) {
+void nprimes_ww(int N) {
 
   for (int i = 2; N > 0; ++i) {
     int isPrime = 1;

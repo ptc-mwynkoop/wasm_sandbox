@@ -1,2 +1,7 @@
+number_ops_pthread.wasm
+number_ops_pthread.js
+number_ops_pthread.js.mem
+pthread-main.js
+
 number_ops.wasm
 number_ops.js

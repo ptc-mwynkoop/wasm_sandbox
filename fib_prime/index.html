@@ -9,18 +9,41 @@
 
 <body>
   Hello WASM<br/>
-  <button onclick='onButtonClick(event)'>Go</button>
+  <button onclick='onButtonClick(event)'>Go (Webworker)</button>
+  <br/>
+  <button onclick='onButtonClickPthread(event)'>Go (Pthread)</button>
 
   <script>
     let gKeepRunning = false;
+    let gMode = "webworker";
 
     const onButtonClick = (evt) => {
+      if(gKeepRunning && gMode !== "webworker") {
+        console.log('Can\'t change modes while running.');
+        return;
+      }
       gKeepRunning = !gKeepRunning;
-      evt.currentTarget.innerHTML = (gKeepRunning) ? 'Stop' : 'Go';
+      gMode = "webworker";
+      evt.currentTarget.innerHTML = (gKeepRunning) ? 'Stop (Webworker)' : 'Go (Webworker)';
       if( gKeepRunning ) {
         callprime();
         callfib();
       }
+    }
+
+    const onButtonClickPthread = (evt) => {
+
+      if(gKeepRunning && gMode !== "pthread") {
+        console.log('Can\'t change modes while running.');
+        return;
+      }
+      gKeepRunning = !gKeepRunning;
+      gMode = "pthread";
+      evt.currentTarget.innerHTML = (gKeepRunning) ? 'Stop (Pthread)' : 'Go (Pthread)';
+      if(gKeepRunning)
+        startPthreads();
+      else
+        stopPthreads();
     }
 
 
@@ -56,9 +79,22 @@
     const callprime = () => {
       console.log("Prime worker starting");
       primeWorker.postMessage({ id: "nprimes", "Val1": 12366 });
-    }    
+    }
+
+    // Start the PThreads
+    const startPthreads = () => {
+      console.log("Starting pthreads...");
+      Module._startThreads(123456);
+    }
+
+    const stopPthreads = () => {
+      console.log("Stopping pthreads...");
+      Module._stopThreads();
+      console.log("Stopped.")
+    }
 
   </script>
+  <script type="text/javascript" src="number_ops_pthread.js"></script>
 </body>
 
 </html>
