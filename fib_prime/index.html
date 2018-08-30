@@ -11,7 +11,7 @@
   Hello WASM<br/>
   <button onclick='onButtonClick(event)'>Go (Webworker)</button>
   <br/>
-  <button onclick='onButtonClickPthread(event)'>Go (Pthread)</button>
+  <button onclick='onButtonClickPthread(event)'>Go (WASM)</button>
 
   <script>
     let gKeepRunning = false;
@@ -33,17 +33,17 @@
 
     const onButtonClickPthread = (evt) => {
 
-      if(gKeepRunning && gMode !== "pthread") {
+      if(gKeepRunning && gMode !== "WASM") {
         console.log('Can\'t change modes while running.');
         return;
       }
       gKeepRunning = !gKeepRunning;
-      gMode = "pthread";
-      evt.currentTarget.innerHTML = (gKeepRunning) ? 'Stop (Pthread)' : 'Go (Pthread)';
+      gMode = "WASM";
+      evt.currentTarget.innerHTML = (gKeepRunning) ? 'Stop (WASM)' : 'Go (WASM)';
       if(gKeepRunning)
-        startPthreads();
+        startWASMThreads();
       else
-        stopPthreads();
+        stopWASMThreads();
     }
 
 
@@ -82,19 +82,20 @@
     }
 
     // Start the PThreads
-    const startPthreads = () => {
-      console.log("Starting pthreads...");
+    const startWASMThreads = () => {
+      console.log("Starting WASM threads...");
       Module._startThreads(123456);
     }
 
-    const stopPthreads = () => {
-      console.log("Stopping pthreads...");
+    const stopWASMThreads = () => {
+      console.log("Stopping WASM threads...");
       Module._stopThreads();
       console.log("Stopped.")
     }
 
   </script>
-  <script type="text/javascript" src="number_ops_pthread.js"></script>
+  <!-- <script type="text/javascript" src="number_ops_pthread.js"></script> -->
+  <script type="text/javascript" src="number_ops_stdthread.js"></script>
 </body>
 
 </html>

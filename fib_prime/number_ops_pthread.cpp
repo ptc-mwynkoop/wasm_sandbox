@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+
+
 int fib(int n) {
   int i, t, a = 0, b = 1;
   for (i = 0; i < n; i++) {
@@ -73,6 +75,8 @@ void* prime_thread_main(void* userData)
   return NULL;
 }
 
+extern "C" {
+
 EMSCRIPTEN_KEEPALIVE
 void startThreads(int n)
 {
@@ -96,4 +100,8 @@ void stopThreads()
   g_quit = true;
   pthread_join(g_fib_thread, NULL);
   pthread_join(g_prime_thread, NULL);
+
+  printf("Joined pthreads.\n");
+}
+
 }

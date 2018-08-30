@@ -29,3 +29,13 @@ to stop the threads, you should be able to stop one of them before it has comple
 this go unbounded, it tends to crash the browser...
 
 You can still use this app without Pthread support, but you will be limited to the Web Worker flow.
+
+# STD Thread support
+
+Once Pthreads are enabled, we can run w/ STD thread support as well.  This project is not currently set up to
+run them concurrently.  By default the project is set up for STD Threads, but to enable Pthreads, just swap the
+javascript webassembly wrapper in index.html.
+```html
+  <!-- <script type="text/javascript" src="number_ops_pthread.js"></script> -->
+  <script type="text/javascript" src="number_ops_stdthread.js"></script>
+```
