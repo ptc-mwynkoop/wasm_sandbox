@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>WebAssembly Example</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  Hello WASM<br/>
+  <button onclick='onButtonClick(event)'>Go</button>
+
+  <script>
+    let gKeepRunning = false;
+
+    const onButtonClick = (evt) => {
+      gKeepRunning = !gKeepRunning;
+      evt.currentTarget.innerHTML = (gKeepRunning) ? 'Stop' : 'Go';
+      if( gKeepRunning ) {
+        callprime();
+        callfib();
+      }
+    }
+
+
+    // Setup a Web Worker to calculate fibonnaci numbers
+    const fibWorker = new Worker("fibworker.js");
+    fibWorker.onerror = (evt) => {
+      console.log(`Error from Fib Web Worker: ${evt.message}`);
+    }
+
+    fibWorker.onmessage = (evt) => {
+      console.log(`    Fib worker done: ${evt.data}`);
+      if( gKeepRunning )
+        callfib();
+    }
+
+    const callfib = () => {
+      console.log("    Fib worker starting");
+      fibWorker.postMessage({ id: "fib", "Val1": 1299078666 });
+    }
+
+    // Setup a Web Worker to find primes
+    const primeWorker = new  Worker("nprimeworker.js");
+    primeWorker.onerror = (evt) => {
+      console.log(`Error from Prime Web Worker: ${evt.message}`);
+    }
+
+    primeWorker.onmessage = (evt) => {
+      console.log(`Prime worker done: ${evt.data}`);
+      if( gKeepRunning )
+        callprime();
+    }
+
+    const callprime = () => {
+      console.log("Prime worker starting");
+      primeWorker.postMessage({ id: "nprimes", "Val1": 12366 });
+    }    
+
+  </script>
+</body>
+
+</html>
