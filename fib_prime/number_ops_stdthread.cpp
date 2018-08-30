@@ -1,5 +1,6 @@
 #include <emscripten.h>
 #include <thread> 
+#include <future>
 #include <stdio.h>
 #include <stdbool.h>
 
@@ -36,6 +37,8 @@ void nprimes(int N) {
 
 std::thread g_fib_thread;
 std::thread g_prime_thread;
+std::future<int> g_fib_future;
+std::future<int> g_prime_future;
 bool g_quit = false;
 
 void fib_thread_main(int n)
@@ -78,6 +81,14 @@ void startThreads(int n)
   g_fib_thread = std::thread(fib_thread_main, n);
   g_prime_thread = std::thread(prime_thread_main, n);
 
+  g_prime_future = std::async(std::launch::async, [n]{
+    nprimes(n);
+    return 1;
+  });
+  g_fib_future = std::async(std::launch::async, [n]{
+    return fib(n);
+  });
+
   printf("Started std threads.\n");
 }
 
@@ -89,6 +100,8 @@ void stopThreads()
   g_prime_thread.join();
 
   printf("Joined std Threads\n");
+
+  printf("Result of asyncs... %d, %d\n", g_fib_future.get(), g_prime_future.get());
 }
 
 }
