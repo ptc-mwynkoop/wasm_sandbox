@@ -25,7 +25,7 @@
 
 
     // Setup a Web Worker to calculate fibonnaci numbers
-    const fibWorker = new Worker("fibworker.js");
+    const fibWorker = new Worker("number_ops_worker.js");
     fibWorker.onerror = (evt) => {
       console.log(`Error from Fib Web Worker: ${evt.message}`);
     }
@@ -42,7 +42,7 @@
     }
 
     // Setup a Web Worker to find primes
-    const primeWorker = new  Worker("nprimeworker.js");
+    const primeWorker = new  Worker("number_ops_worker.js");
     primeWorker.onerror = (evt) => {
       console.log(`Error from Prime Web Worker: ${evt.message}`);
     }
