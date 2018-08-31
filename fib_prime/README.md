@@ -27,21 +27,29 @@ These instructions assume you have Emscripten and Python 2.7 installed.
 
  
 
-# Pthread support
+# WASM Thread support
 
-This project now supports pthreads, in order to use them, you must download [Firefox Nightly](https://www.mozilla.org/en-US/firefox/channel/desktop/#nightly) and enable the following option in `about:config`
+Note that WASM threads are VERY FAST and are limited to 1000 iterations.  If you click the button twice very fast
+to stop the threads, you should be able to stop one of them before it has completed all 1000 runs.  If we let
+this go unbounded, it tends to crash the browser...
+
+You can still use this app without WASM thread support, but you will be limited to the Web Worker flow.
+
+Currently WASM threads are only supported in experimental browsers w/ special options enabled.  See below for
+instructions.
+
+## Browser Support: Firefox Nightly
+
+To enable WASM thread support in Firefox, you must download [Firefox Nightly](https://www.mozilla.org/en-US/firefox/channel/desktop/#nightly) and enable the following option in `about:config`
 
 ```
 javascript.options.shared_memory = true
 ```
+## Browser Support: Chrome Canary
 
-Note that Pthreads are VERY FAST and are limited to 1000 iterations.  If you click the button twice very fast
-to stop the threads, you should be able to stop one of them before it has completed all 1000 runs.  If we let
-this go unbounded, it tends to crash the browser...
+To enable WASM thread support in Chrome, you must download [Chrome Canary](https://www.google.com/chrome/canary/) and enable WASM thread support by enabling `chrome://flags/#enable-webassembly-threads` 
 
-You can still use this app without Pthread support, but you will be limited to the Web Worker flow.
-
-# STD Thread / Async support
+# pthread / `std::thread` / `std::async` support
 
 Once Pthreads are enabled, we can run w/ STD thread support as well.  This project is not currently set up to
 run them concurrently.  By default the project is set up for STD Threads, but to enable Pthreads, just swap the
