@@ -1,19 +1,30 @@
 
-# Instructions
 
-I’m on windows, so you may have to make mods to some of this stuff to use it.
+# WASM Exploration for Chalk
+This project is a toy used to explore WASM as it relates to a 'Chalk in a web browser'
+application.
+
+One of the things of concern is Chalk's use of threads and WEBASM's lack of support for them. 
+This project uses [Web Workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API) because they
+are a way of making additional threads available to the browser.
+
+We use [Emscripten](http://kripken.github.io/emscripten-site/) to produce the .wasm files.
+# Build Instructions
+
+These instructions assume you have Emscripten and Python 2.7 installed.
  
-1. Build the c files
-  `./build.sh` or `build.bat`
+1. Build the .wasm and 'glue' files by running either *build.bat* or *build.sh*.
  
-2. Use python to run a local web server like this:
-  `python server.py`
+# Running Instructions
+1. Launch a local web server to serve up the project files. Loading them directly from the filesystem wont work. I use python to run a local web server like this:
+  ```python server.py```
  
-3. Then open a browser and load http://localhost:9000
+2. Open a browser and load http://localhost:9000
  
-4. Then open the developer tools so you can see the browser console
+3. Then open the developer tools so you can see the browser console as that is where all the program output appears.
  
-5. Now click the ‘Go (Webworker)’ or 'Go (Pthread)' button and watch the console: you can see the Fibonacci calc runs more than once during the time the prime calculation completes.
+4. Now click the ‘Go’ button and watch the console: you can see the Fibonacci calc runs more than once during the time the prime calculation completes.
+
  
 
 # Pthread support
@@ -39,3 +50,14 @@ javascript webassembly wrapper in index.html.
   <!-- <script type="text/javascript" src="number_ops_pthread.js"></script> -->
   <script type="text/javascript" src="number_ops_stdthread.js"></script>
 ```
+
+# Interesting Emscripten links / Additional Information
+
+ [Browser Execution Environment](http://kripken.github.io/emscripten-site/docs/api_reference/emscripten.h.html#browser-execution-environment) talks about how a long-running 'thread' can
+ be created. 
+ 
+ So does this section about [Implementing an async main loop in C++](https://kripken.github.io/emscripten-site/docs/porting/emscripten-runtime-environment.html#implementing-an-asynchronous-main-loop-in-c-c)
+
+ [Worker API](http://kripken.github.io/emscripten-site/docs/api_reference/emscripten.h.html?highlight=call_worker#worker-api) may be useful if we want to try to emulate threading.
+
+ [WebAssembly Explorer](https://mbebenita.github.io/WasmExplorer/) allows you to experiment with running C++ code in the browser without setting up Emscripten.
