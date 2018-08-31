@@ -5,6 +5,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>WebAssembly Example</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="styles.css"/>
+
+  
 </head>
 
 <body>
@@ -12,6 +16,12 @@
   <button onclick='onButtonClick(event)'>Go (Webworker)</button>
   <br/>
   <button onclick='onButtonClickPthread(event)'>Go (WASM)</button>
+
+  <div class="surfacewrap">
+    <canvas id="surface"></canvas>
+    <button id='clearbtn'>Clear Drawing</button>
+  </div>
+  
 
   <script>
     let gKeepRunning = false;
@@ -96,6 +106,17 @@
   </script>
   <!-- <script type="text/javascript" src="number_ops_pthread.js"></script> -->
   <script type="text/javascript" src="number_ops_stdthread.js"></script>
+
+  <script src="surface.js"></script>
+  <script>
+    let strokeSurface = new CanvasSketch('surface', 'clearbtn');
+    strokeSurface.onStroke( points => {
+      // pass these down into WASM for processing?
+      console.log(JSON.stringify(points));
+    });
+  </script>
+
+
 </body>
 
 </html>
