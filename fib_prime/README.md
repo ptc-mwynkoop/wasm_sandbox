@@ -38,6 +38,20 @@ You can still use this app without WASM thread support, but you will be limited 
 Currently WASM threads are only supported in experimental browsers w/ special options enabled.  See below for
 instructions.
 
+## pthread / `std::thread` / `std::async` support
+Pthreads are enabled via the compiler option `-s USE_PTHREADS=1`, optionally you may specify the number of 
+Pthreads that are pre-created at launch time with `-s PTHREAD_POOL_SIZE=[N]`.  This second argument is optional, 
+however if you do not specify it, whenever a new thread is created, the implementation must go back to Javascript
+to create a new pthread wrapper.  This is inefficient, so pre-creating them is preferred.  You may specify `-1` 
+int his field for a popup to the user to request how many pthreads to create, this is good for debugging.
+
+Once Pthreads are enabled, we can run w/ STD thread support as well.  This project is not currently set up to
+run them concurrently.  By default the project is set up for STD Threads, but to enable Pthreads, just swap the
+javascript webassembly wrapper in index.html.
+```html
+  <!-- <script type="text/javascript" src="number_ops_pthread.js"></script> -->
+  <script type="text/javascript" src="number_ops_stdthread.js"></script>
+```
 ## Browser Support: Firefox Nightly
 
 To enable WASM thread support in Firefox, you must download [Firefox Nightly](https://www.mozilla.org/en-US/firefox/channel/desktop/#nightly) and enable the following option in `about:config`
@@ -47,17 +61,8 @@ javascript.options.shared_memory = true
 ```
 ## Browser Support: Chrome Canary
 
-To enable WASM thread support in Chrome, you must download [Chrome Canary](https://www.google.com/chrome/canary/) and enable WASM thread support by enabling `chrome://flags/#enable-webassembly-threads` 
-
-# pthread / `std::thread` / `std::async` support
-
-Once Pthreads are enabled, we can run w/ STD thread support as well.  This project is not currently set up to
-run them concurrently.  By default the project is set up for STD Threads, but to enable Pthreads, just swap the
-javascript webassembly wrapper in index.html.
-```html
-  <!-- <script type="text/javascript" src="number_ops_pthread.js"></script> -->
-  <script type="text/javascript" src="number_ops_stdthread.js"></script>
-```
+To enable WASM thread support in Chrome, you must download [Chrome Canary](https://www.google.com/chrome/canary/)
+and enable WASM thread support by enabling `chrome://flags/#enable-webassembly-threads` 
 
 # Interesting Emscripten links / Additional Information
 
