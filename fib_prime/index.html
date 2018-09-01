@@ -15,7 +15,8 @@
   Hello WASM<br/>
   <button onclick='onButtonClick(event)'>Go (Webworker)</button>
   <br/>
-  <button onclick='onButtonClickPthread(event)'>Go (WASM)</button>
+  <button onclick='onButtonClickPthread(event)'>Go (WASM)</button> <br/>
+  <button onclick='onButtonClickThrowException(event)'>Throw Exception</button>
 
   <div class="surfacewrap">
     <canvas id="surface"></canvas>
@@ -26,6 +27,10 @@
   <script>
     let gKeepRunning = false;
     let gMode = "webworker";
+
+     const onButtonClickThrowException = (evt) => {
+       Module._throwException();
+     }
 
     const onButtonClick = (evt) => {
       if(gKeepRunning && gMode !== "webworker") {

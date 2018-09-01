@@ -2,7 +2,9 @@
 #include <thread> 
 #include <future>
 #include <stdio.h>
+#include <iostream>
 #include <stdbool.h>
+#include <type_traits>
 
 int fib(int n) {
   int i, t, a = 0, b = 1;
@@ -90,6 +92,11 @@ void startThreads(int n)
   });
 
   printf("Started std threads.\n");
+
+  std::cout << std::boolalpha
+            << "Test C++14, check is_null_ptr : " 
+            << std::is_null_pointer< decltype(nullptr) >::value 
+            << std::endl;
 }
 
 EMSCRIPTEN_KEEPALIVE
@@ -103,5 +110,19 @@ void stopThreads()
 
   printf("Result of asyncs... %d, %d\n", g_fib_future.get(), g_prime_future.get());
 }
+
+
+EMSCRIPTEN_KEEPALIVE
+void throwException()
+{
+  try {
+    throw std::runtime_error("Test");
+  }
+  catch (std::exception& e) {
+    std::cout << "Exception caught: " << e.what() << std::endl;
+  }
+}
+
+
 
 }
